@@ -1,0 +1,26 @@
+
+@import '~@angular/material/theming';
+@import './pokemon-pallete.scss';
+@include mat-core();
+
+
+
+
+$pg-raids-primary: mat-palette($pg-red);
+$pg-raids-accent: mat-palette($pg-blue, 900, 700, 500);
+
+// The warn palette is optional (defaults to red).
+$pg-raids-warn: mat-palette($pg-yellow);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$pg-raids-theme: mat-light-theme($pg-raids-primary, $pg-raids-accent, $pg-raids-warn);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($pg-raids-theme);
+
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
