@@ -10,6 +10,9 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { PublicRoutingModule } from './public-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { RoomListComponent } from './components/room-list/room-list.component';
+import { RoomComponent } from './components/room/room.component';
+import { GetNicknameComponent } from './components/get-nickname/get-nickname.component';
 
 
 @NgModule({
@@ -17,6 +20,9 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
     PublicComponent,
     CreateRoomComponent,
     ToolbarComponent,
+    RoomListComponent,
+    RoomComponent,
+    GetNicknameComponent,
   ],
   imports: [
     FormsModule,
@@ -27,6 +33,7 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
     FirebaseModule,
     GdevToolsModule,
     NgxMaterialTimepickerModule
-  ]
+  ],
+  entryComponents: [GetNicknameComponent]
 })
 export class PublicModule { }

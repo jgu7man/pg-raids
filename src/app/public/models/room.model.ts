@@ -22,7 +22,7 @@ export interface User {
 
 export interface RoomMember {
     nickname: string,
-    pg_code: string,
+    pg_code?: string,
 }
 
 export interface Cords {
