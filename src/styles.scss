@@ -52,3 +52,31 @@ mat-form-field {
         color: var(--button-color);
     }
 }
+
+.thin {
+    font-size: small;
+}
+
+.mid {
+    font-size: 1.5em;
+}
+
+.large {
+    font-size: 2em;
+}
+
+.data, .fas, .far {
+    color: royalblue;
+}
+
+.local, p {
+    color: rgb(27, 48, 109);;
+}
+
+p {
+    font-weight: 700;
+}
+
+mat-card {
+    margin-bottom: 1em;
+}

@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { RoomModel, RoomMember } from '../../models/room.model';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AlertService } from '../../../Gdev-Tools/alerts/alert.service';
 import { Router } from '@angular/router';
 import { CacheService } from '../../../Gdev-Tools/cache/cache.service';
 import { TextService } from '../../../Gdev-Tools/text/gdev-text.service';
+import { RoomsService } from '../../services/rooms.service';
+import { GetNicknameComponent } from '../get-nickname/get-nickname.component';
 
 @Component({
   templateUrl: './create-room.component.html',
@@ -22,49 +24,46 @@ export class CreateRoomComponent implements OnInit {
     private _alerts: AlertService,
     private router: Router,
     private _cache: CacheService,
-    private _text: TextService
+    public text_: TextService,
+    private _rooms: RoomsService,
+    private _dialog: MatDialog
   ) {
-    this.host = this._cache.getDataKey( 'host' )
-    this.room = new RoomModel( '', '', '', new Date(), this.host )
+    this.host = this._cache.getDataKey( 'player' )
+    this.room = new RoomModel( '', '', '', this.now(0,20), this.host, '', [], [], [] )
    }
 
   ngOnInit(): void {
   }
 
-  get Now() {
-    return new Date()
-  }
-
-  transformNow(h,m) {
+  now( h?, m?, set?: boolean, ) {
+    let t = new Date()
     return new Date(
-      this.Now.getFullYear(),
-      this.Now.getMonth(),
-      this.Now.getDate(),
-      this.Now.getHours() + h,
-      this.Now.getMinutes() + m,
+      t.getFullYear(),
+      t.getMonth(),
+      t.getDate(),
+      set ? h : t.getHours() + h,
+      set ? m : t.getMinutes() + m,
     )
   }
 
   stringNow() {
-    return `${ this.Now.getFullYear() }${ this.Now.getMonth()+1 }${ this.Now.getDate() }${ this.Now.getHours() }${ this.Now.getMinutes() }`
+    let t = new Date()
+    return `${ t.getFullYear() }${ t.getMonth()+1 }${ t.getDate() }${ t.getHours() }${ t.getMinutes() }`
   }
 
 
   formatTime(date: Date) {
-    return this._text.stringifyTime(date)
+    return this.text_.stringifyTime(date)
   }
 
   setTime(matchTime) {
     // console.log( matchTime );
     var hour = matchTime.split( ':' )[ 0 ]
-    var min = matchTime.split( ':' )[ 0 ]
+    var min = matchTime.split( ':' )[ 1 ]
 
-    this.room.match_hour = new Date(
-      this.Now.getFullYear(),
-      this.Now.getMonth(),
-      this.Now.getDate(),
-      hour, min
-    )
+    console.log(matchTime);
+    this.room.match_hour = this.now(hour, min, true)
+    console.log(this.room.match_hour);
   }
 
   
@@ -72,25 +71,36 @@ export class CreateRoomComponent implements OnInit {
   async onSubmit() {
     
     const roomId = this.stringNow()
-    var lapse = this.transformNow( 0, 20 )
-    var over = this.transformNow(0,120)
-    console.log(lapse, this.room.match_hour);
+    this.room.id = roomId
+    var lapse = this.now( 0, 15)
+    var over = this.now(0,120)
+    
+    Object.keys( this.room ).forEach( key => { if ( this.room[ key ] == undefined ) delete this.room[ key ] } ) 
 
     if ( lapse > this.room.match_hour ) {
-      this._alerts.sendMessageAlert( 'Debes darle un tiempo mínimo de 20 minutos para que se junten los participantes' )
+      this._alerts.sendMessageAlert( 'Debes darle un tiempo mínimo de 15 minutos para que se junten los participantes' )
       
-    } else if(over > this.room.match_hour) {
-      this._alerts.sendMessageAlert('No es posible agendar una incursión que no existe aún')
+    } else if ( over < this.room.match_hour ) {
+      this._alerts.sendMessageAlert( 'No es posible agendar una incursión que no existe aún' )
+
+    } else if ( !this.host ) {
+      
+      this._dialog.open( GetNicknameComponent, {
+        minWidth: 300,
+        disableClose: true
+      } ).afterClosed().subscribe( () => {
+        this.room.host = this._cache.getDataKey( 'player' )
+        if ( this.room.host ) {
+          this._rooms.addRoom( this.room )
+        } else {
+          this._alerts.sendMessageAlert('Faltaron tus datos para poder crear la sala. Inténtalo de nuevo')
+        }
+      })
 
     } else {
-      Object.keys(this.room).forEach(key => { if (this.room[key] == undefined) delete this.room[key]})      
-      await this.fs.collection( 'rooms' ).ref
-        .doc( roomId ).set( { ...this.room } )
-        .then( () => {
-          this.router.navigate(['sala', roomId])
-      })
-      this._cache.updateData('room-hosted', this.room)
+           
       
+      this._rooms.addRoom(this.room)
       
     }
 

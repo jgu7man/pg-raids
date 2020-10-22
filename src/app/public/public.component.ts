@@ -16,14 +16,15 @@ export class PublicComponent implements OnInit {
     private _cache: CacheService,
     private _dialog: MatDialog
   ) {
-
+    this._cache.storage = 'local'
    }
 
   ngOnInit(): void {
-    let host = this._cache.getDataKey( 'host' )
-    console.log( host );
-    if ( !host )
+    let player = this._cache.getDataKey( 'player' )
+    console.log( player );
+    if ( !player )
       this._dialog.open( GetNicknameComponent, {
+        disableClose: true,
         minWidth: 300
       })
   }

@@ -5,11 +5,11 @@ export class RoomModel {
         public place: string,
         public match_hour: Date,
         public host: RoomMember,
-        public cords?: Cords,
-        public placed_members?: User[],
-        public remote_members?: User[],
-        public invited_members?: User[],
         public id?: string,
+        public placed_members?: RoomMember[],
+        public remote_members?: RoomMember[],
+        public invited_members?: RoomMember[],
+        public cords?: Cords,
     ) {
         
     }

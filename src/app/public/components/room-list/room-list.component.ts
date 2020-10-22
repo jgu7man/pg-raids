@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { RoomModel } from '../../models/room.model';
+import { RoomsService } from '../../services/rooms.service';
 
 @Component({
   templateUrl: './room-list.component.html',
@@ -6,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RoomListComponent implements OnInit {
 
-  constructor() { }
+  rooms: RoomModel
+
+  constructor (
+    public room_: RoomsService
+  ) { }
 
   ngOnInit(): void {
+    this.room_.roomList.subscribe( rooms => {
+      console.log(rooms);
+    })
   }
 
 }

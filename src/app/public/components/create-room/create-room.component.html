@@ -68,7 +68,7 @@
                         <ngx-timepicker-field
                         (timeChanged)="setTime($event)" 
                         [format]="24" 
-                        [defaultTime]="formatTime(Now)"
+                        [defaultTime]="text_.stringifyTime(now(0, 20))"
                         ></ngx-timepicker-field>
                     </div>
                     <!-- <input [ngxTimepicker]="picker" [format]="24" [value]=formatTime(Now)>

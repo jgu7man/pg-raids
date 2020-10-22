@@ -1,3 +1,141 @@
+<div class="container">
+    <div class="row">
+        <div class="col s12" id="countdown">
+            <h1 
+            class="data" 
+            [ngClass]="{'red-text': (timer$ | async) < 60}"
+            >
+                {{ timer$ | async | time}}
+            </h1>
+            <p>Segundos para el encuentro</p>
+        </div>
+    </div>
+    <div class="row" *ngIf="room.poke_name">
+        <div class="col s12 center" id="hoster_info">
+            <p class="large">
+                <b>Hoster: </b>
+                <span class="data">{{room.host.nickname}}</span>
+            </p>
+            <span class="data">{{room.host.pg_code}}</span>
+        </div>
+    </div>
+    <div class="row center" id="actions-bar">
+        <div class="col s4">
+            <i class="fas fa-plus-circle fa-2x"></i>
+        </div>
+        <div class="col s4">
+            <i class="fas fa-share-alt fa-2x"></i>
+        </div>
+        <div class="col s4">
+            <i class="fas fa-minus-circle fa-2x"></i>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 center">
+            <p>Súmate a esta incursión</p>
+            
+            
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>
+                        Presenciales
+                    </mat-card-title>
+                    <mat-card-subtitle>
+                        Si estas cerca del gimnasio y puedes acercarte físicamente. Inscríbete aquí
+                    </mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <mat-list>
+                        <mat-list-item *ngFor="let member of room.placed_members" class="member">
+                            <p matLine class="mid nickname">
+                                @{{member.nickname}} - 
+                                <span class="thin">
+                                    {{member.pg_code}}
+                                </span>  
+                                <span *ngIf="member.nickname == room.host.nickname">
+                                    <i class="fas fa-user-circle"></i>
+                                </span>
+                            </p>
+                            <div class="delete">
+                                <i class="fas fa-trash red-text   "></i>
+                            </div>
+                        </mat-list-item>
+                    </mat-list>
+                </mat-card-content>
+                <mat-card-actions class="list-actions">
+                    <button mat-icon-button
+                    (click)="addMember('placed')">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </mat-card-actions>
+            </mat-card>
 
-    <h1>{{ timer$ | async | time}}</h1>
-    {{secondsToMatch()}}
+
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>
+                        Remotos
+                    </mat-card-title>
+                    <mat-card-subtitle>
+                        Si estas cerca del gimnasio pero no puedes acercarte físicamente, usa pase remoto. Inscríbete aquí
+                    </mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <mat-list>
+                        <mat-list-item *ngFor="let member of room.remote_members" class="member">
+                            <p matLine class="mid nickname">
+                                @{{member.nickname}} - 
+                                <span class="thin">
+                                    {{member.pg_code}}
+                                </span>  
+                                <span *ngIf="member.nickname == room.host.nickname">
+                                    <i class="fas fa-user-circle"></i>
+                                </span>
+                            </p>
+                            <div class="delete">
+                                <i class="fas fa-trash red-text   "></i>
+                            </div>
+                        </mat-list-item>
+                    </mat-list>
+                </mat-card-content>
+                <mat-card-actions class="list-actions">
+                    <button mat-icon-button
+                    (click)="addMember('remote')">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+
+
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>
+                        Invitados
+                    </mat-card-title>
+                    <mat-card-subtitle>
+                        Si no estás cerca del gimnasio pero conoces al hoster o a alguno de los presenciales o remotos. Solicita que te inviten
+                    </mat-card-subtitle>
+                </mat-card-header>
+               <mat-card-content>
+                    <mat-list>
+                        <mat-list-item *ngFor="let member of room.invited_members" class="member">
+                            <p matLine class="mid nickname">
+                                @{{member.nickname}} - 
+                                <span class="thin">
+                                    {{member.pg_code}}
+                                </span>  
+                                <span *ngIf="member.nickname == room.host.nickname">
+                                    <i class="fas fa-user-circle"></i>
+                                </span>
+                            </p>
+                            <div class="delete">
+                                <i class="fas fa-trash red-text   "></i>
+                            </div>
+                        </mat-list-item>
+                    </mat-list>
+                </mat-card-content>
+                
+            </mat-card>
+        </div>
+    </div>
+</div>
