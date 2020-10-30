@@ -5,8 +5,10 @@
     flex-flow: wrap column;
     text-align: center;
     padding-top: 2em;
-    h1 {
-        font-size: 5em;
+    ::ng-deep {
+        h1 {
+            font-size: 5em !important;
+        }
     }
 }
 

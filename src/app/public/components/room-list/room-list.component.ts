@@ -21,7 +21,8 @@ export class RoomListComponent implements OnInit {
     this.room_.roomList.subscribe(rooms => {
       var today = new Date()
       rooms.forEach(room => {
-        let match = new Date( room.match_hour['seconds'] * 1000 )
+        let match = room.match_hour
+        console.log(match);
         let afterMatch = new Date(
           match.getFullYear(),
           match.getMonth(),

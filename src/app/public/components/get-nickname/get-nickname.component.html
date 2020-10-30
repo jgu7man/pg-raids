@@ -29,8 +29,9 @@
                 name="pg_code"
                 #pg_code="ngModel"
                 required
-                minlength="12"
-                maxlength="12"
+                minlength="14"
+                maxlength="14"
+                [textMask]="{mask: mask}"
                 >
                 <mat-error *ngIf="pg_code.invalid
                 || (pg_code.dirty && pg_code.touched)">

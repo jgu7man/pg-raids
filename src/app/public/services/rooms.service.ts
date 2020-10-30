@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { CacheService } from '../../Gdev-Tools/cache/cache.service';
 import { AlertService } from '../../Gdev-Tools/alerts/alert.service';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +34,16 @@ export class RoomsService {
 
   get() {
     this.roomList = this.fs.collection<RoomModel>('rooms').valueChanges()
-      .pipe(switchMap( list =>{ return list.length > 0 ? of( list) : of([])}))
+      .pipe(
+        map(rooms => {
+          return rooms.map((room: RoomModel) => {
+            room.match_hour = new Date(room.match_hour['seconds'] * 1000)
+            return room
+          })
+        }),
+        switchMap(list => {
+          return list.length > 0 ? of<RoomModel[]>(list) : of<RoomModel[]>([])
+      }))
   }
 
   async getRoom(id: string) {

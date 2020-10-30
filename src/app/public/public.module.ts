@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { MaterialModule } from './../material.module';
 import { FirebaseModule } from './../firebase.module';
 import { GdevToolsModule } from './../Gdev-Tools/gdev-tools.module';
+import {ShareModule} from 'ngx-sharebuttons';
+import {TextMaskModule} from 'angular2-text-mask';
 
 import { PublicComponent } from './public.component';
 import { CreateRoomComponent } from './components/create-room/create-room.component';
@@ -15,8 +17,8 @@ import { RoomComponent } from './components/room/room.component';
 import { GetNicknameComponent } from './components/get-nickname/get-nickname.component';
 import { AddMemberComponent } from './components/room/add-member/add-member.component';
 import { DeleteRoomComponent } from './components/room/delete-room/delete-room.component';
-import {ShareModule} from 'ngx-sharebuttons';
 import { ShareRoomComponent } from './components/room/share-room/share-room.component';
+import { CountdownComponent } from './components/countdown/countdown.component';
 
 
 @NgModule({
@@ -30,6 +32,7 @@ import { ShareRoomComponent } from './components/room/share-room/share-room.comp
     AddMemberComponent,
     DeleteRoomComponent,
     ShareRoomComponent,
+    CountdownComponent,
   ],
   imports: [
     FormsModule,
@@ -40,7 +43,8 @@ import { ShareRoomComponent } from './components/room/share-room/share-room.comp
     FirebaseModule,
     GdevToolsModule,
     NgxMaterialTimepickerModule,
-    ShareModule
+    ShareModule,
+    TextMaskModule
   ],
   entryComponents: [GetNicknameComponent, AddMemberComponent, DeleteRoomComponent, ShareRoomComponent]
 })

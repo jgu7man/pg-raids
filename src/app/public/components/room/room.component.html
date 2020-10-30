@@ -20,12 +20,7 @@
             </p>
         </div>
         <div class="col s12" id="countdown">
-            <h1 
-            class="data" 
-            [ngClass]="{'red-text': (timer$ | async) < 60}"
-            >
-                {{ timer$ | async | time}}
-            </h1>
+            <app-countdown [future]="future"></app-countdown>
             <p>Segundos para el encuentro</p>
         </div>
     </div>

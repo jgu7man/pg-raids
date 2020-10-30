@@ -16,6 +16,12 @@ export class GetNicknameComponent implements OnInit {
   member: RoomMember = {
     nickname: '', pg_code: ''
   }
+
+  public mask = [
+    /[1-9]/, /\d/, /\d/, /\d/, ' ',
+    /\d/, /\d/, /\d/, /\d/, ' ',
+    /\d/, /\d/, /\d/, /\d/]
+  
   constructor (
     private _cache: CacheService,
     private _dialog: MatDialogRef<GetNicknameComponent>,
@@ -28,6 +34,8 @@ export class GetNicknameComponent implements OnInit {
   }
 
   async onSave() {
+    this.member.pg_code = this.member.pg_code.replace(/\s/g, '')
+
     this._cache.updateData('player', this.member)
     
     this.getData = false
