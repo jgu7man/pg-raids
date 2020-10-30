@@ -15,6 +15,8 @@ import { RoomComponent } from './components/room/room.component';
 import { GetNicknameComponent } from './components/get-nickname/get-nickname.component';
 import { AddMemberComponent } from './components/room/add-member/add-member.component';
 import { DeleteRoomComponent } from './components/room/delete-room/delete-room.component';
+import {ShareModule} from 'ngx-sharebuttons';
+import { ShareRoomComponent } from './components/room/share-room/share-room.component';
 
 
 @NgModule({
@@ -27,6 +29,7 @@ import { DeleteRoomComponent } from './components/room/delete-room/delete-room.c
     GetNicknameComponent,
     AddMemberComponent,
     DeleteRoomComponent,
+    ShareRoomComponent,
   ],
   imports: [
     FormsModule,
@@ -36,8 +39,9 @@ import { DeleteRoomComponent } from './components/room/delete-room/delete-room.c
     MaterialModule,
     FirebaseModule,
     GdevToolsModule,
-    NgxMaterialTimepickerModule
+    NgxMaterialTimepickerModule,
+    ShareModule
   ],
-  entryComponents: [GetNicknameComponent, AddMemberComponent, DeleteRoomComponent]
+  entryComponents: [GetNicknameComponent, AddMemberComponent, DeleteRoomComponent, ShareRoomComponent]
 })
 export class PublicModule { }

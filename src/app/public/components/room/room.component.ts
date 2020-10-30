@@ -9,6 +9,8 @@ import { CacheService } from '../../../Gdev-Tools/cache/cache.service';
 import { AlertService } from '../../../Gdev-Tools/alerts/alert.service';
 import { AddMemberComponent, MemberAdded } from './add-member/add-member.component';
 import { DeleteRoomComponent } from './delete-room/delete-room.component';
+import { ShareRoomComponent } from './share-room/share-room.component';
+import {Clipboard} from '@angular/cdk/clipboard';
 
 @Component({
   templateUrl: './room.component.html',
@@ -31,7 +33,8 @@ export class RoomComponent implements OnInit {
     private _rooms: RoomsService,
     private _cache: CacheService,
     private _dialog: MatDialog,
-    private _alerts: AlertService
+    private _alerts: AlertService,
+    private _clipboard: Clipboard
   ) {
     this.room = new RoomModel( '', '', '', new Date, this.host, '', [], [], [] )
     this.room.id = this._route.snapshot.params[ 'id' ]
@@ -76,6 +79,17 @@ export class RoomComponent implements OnInit {
     addMemberDialog.afterClosed().subscribe((result: MemberAdded) => {
       if (result) { this.validateMembers(result.list, result.player) }
     })
+  }
+
+  openShareDialog() {
+    var dialog = this._dialog.open(ShareRoomComponent, {
+      minWidth: 350
+    })
+  }
+
+  clipPlayerCode(code: string) {
+    this._clipboard.copy(code)
+    this._alerts.sendFloatNotification('Código de juagador copiado')
   }
   
 

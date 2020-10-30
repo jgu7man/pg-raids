@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { RoomModel, RoomMember } from '../models/room.model';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { CacheService } from '../../Gdev-Tools/cache/cache.service';
 import { AlertService } from '../../Gdev-Tools/alerts/alert.service';
+import { switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +34,7 @@ export class RoomsService {
 
   get() {
     this.roomList = this.fs.collection<RoomModel>('rooms').valueChanges()
+      .pipe(switchMap( list =>{ return list.length > 0 ? of( list) : of([])}))
   }
 
   async getRoom(id: string) {
@@ -59,9 +61,15 @@ export class RoomsService {
       let memberList: RoomMember[] = room[`${list}_members`]
       memberList.push(player)
 
-      this.updateRoom(room)
-
+    this.updateRoom(room)
+    
+    if (list == 'invited') {
+      this._alerts.sendMessageAlert('Toca el nombre del usuario que te va a invitar para copiar su código y ve al juego para enviarle una solicitud de amistad.')
+    } else {
+      
       this._alerts.sendFloatNotification('Agregado')
+    }
+
 
   }
 

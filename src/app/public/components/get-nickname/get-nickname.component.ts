@@ -3,6 +3,7 @@ import { RoomMember } from '../../models/room.model';
 import { CacheService } from '../../../Gdev-Tools/cache/cache.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Loading } from '../../../Gdev-Tools/loading/loading.service';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   templateUrl: './get-nickname.component.html',
@@ -18,7 +19,8 @@ export class GetNicknameComponent implements OnInit {
   constructor (
     private _cache: CacheService,
     private _dialog: MatDialogRef<GetNicknameComponent>,
-    private loading: Loading
+    private loading: Loading,
+    private fs: AngularFirestore
   ) { }
 
   async ngOnInit() {
@@ -26,10 +28,19 @@ export class GetNicknameComponent implements OnInit {
   }
 
   async onSave() {
-    this._cache.updateData( 'player', this.member )
+    this._cache.updateData('player', this.member)
+    
     this.getData = false
     await this.loading.waitFor( 2000 )
     this._dialog.close()
+    
+    // Save on firestore
+    let playersRef = this.fs.collection('players').ref
+      playersRef.where('pg_code', '==', this.member.pg_code)
+      .get().then(docs => {
+        if (docs.size < 1) { playersRef.add({...this.member})}
+      })
+    
   }
 
 }
