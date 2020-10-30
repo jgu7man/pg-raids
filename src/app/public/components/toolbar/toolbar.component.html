@@ -6,10 +6,23 @@
   <span>PG-raids</span>
   <span class="spacer"></span>
   <span>
-    <button mat-raised-button
-    [routerLink]="['/nueva']"
-    >
-      Crear sala
-    </button>
+    <ng-container *ngIf="room && validateTime; else noHostedRoom">
+      <button mat-raised-button
+      [routerLink]="['/sala', room.id]"
+      >
+        Ir a sala
+      </button>
+      
+    </ng-container>
+    <ng-template #noHostedRoom>
+      <button mat-raised-button
+      [routerLink]="['/nueva']"
+      >
+        Crear sala
+      </button>
+      
+
+    </ng-template>
+    
   </span>
 </mat-toolbar>

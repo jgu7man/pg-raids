@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { RoomModel } from '../models/room.model';
+import { RoomModel, RoomMember } from '../models/room.model';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { CacheService } from '../../Gdev-Tools/cache/cache.service';
+import { AlertService } from '../../Gdev-Tools/alerts/alert.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class RoomsService {
   constructor (
     private fs: AngularFirestore,
     private router: Router,
-    private _cache: CacheService
+    private _cache: CacheService,
+    private _alerts: AlertService
   ) {
     this.get()
    }
@@ -49,5 +51,26 @@ export class RoomsService {
     this.fs.collection('rooms').ref.doc(room.id).set({...room}, {merge: true})
   }
 
+
+  addMember(list: 'placed' | 'remote' | 'invited', room: RoomModel, player?:RoomMember) {
+
+      player = player ? player : this._cache.getDataKey('player')
+
+      let memberList: RoomMember[] = room[`${list}_members`]
+      memberList.push(player)
+
+      this.updateRoom(room)
+
+      this._alerts.sendFloatNotification('Agregado')
+
+  }
+
+
+
+  deleteRoom(roomId:string) {
+    this.fs.collection('rooms').ref.doc(roomId).delete()
+    this._cache.deleteDataKey('room-hosted')
+    this.router.navigate(['/'])
+  }
 
 }

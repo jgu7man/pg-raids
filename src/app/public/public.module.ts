@@ -13,6 +13,8 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { RoomListComponent } from './components/room-list/room-list.component';
 import { RoomComponent } from './components/room/room.component';
 import { GetNicknameComponent } from './components/get-nickname/get-nickname.component';
+import { AddMemberComponent } from './components/room/add-member/add-member.component';
+import { DeleteRoomComponent } from './components/room/delete-room/delete-room.component';
 
 
 @NgModule({
@@ -23,6 +25,8 @@ import { GetNicknameComponent } from './components/get-nickname/get-nickname.com
     RoomListComponent,
     RoomComponent,
     GetNicknameComponent,
+    AddMemberComponent,
+    DeleteRoomComponent,
   ],
   imports: [
     FormsModule,
@@ -34,6 +38,6 @@ import { GetNicknameComponent } from './components/get-nickname/get-nickname.com
     GdevToolsModule,
     NgxMaterialTimepickerModule
   ],
-  entryComponents: [GetNicknameComponent]
+  entryComponents: [GetNicknameComponent, AddMemberComponent, DeleteRoomComponent]
 })
 export class PublicModule { }

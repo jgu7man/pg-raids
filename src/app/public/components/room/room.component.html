@@ -1,5 +1,20 @@
+
 <div class="container">
     <div class="row">
+        <div class="col s12 center">
+            <p class="mid center">
+                ¡Vamos por <span class="data">{{room.poke_name}}</span>!
+            </p>
+            <p class="mid center">
+                en el gimnasio <span class="data">{{room.gym_name}}</span>
+            </p>
+            <p class="center">
+                ubicado en <span class="data">{{room.place}}</span>
+            </p>
+            <p class="center" *ngIf="room.cords">
+                cords: {{room.cords.lat}} - {{room.cords.long}}
+            </p>
+        </div>
         <div class="col s12" id="countdown">
             <h1 
             class="data" 
@@ -21,13 +36,24 @@
     </div>
     <div class="row center" id="actions-bar">
         <div class="col s4">
-            <i class="fas fa-plus-circle fa-2x"></i>
+            <button mat-raised-button
+            (click)="openAddMember()"
+            color="accent"
+            >
+                Agregar miembro
+            </button>
+            
         </div>
         <div class="col s4">
             <i class="fas fa-share-alt fa-2x"></i>
         </div>
         <div class="col s4">
-            <i class="fas fa-minus-circle fa-2x"></i>
+            <button mat-raised-button
+            [disabled]="!isHost()"
+            color="primary"
+            (click)="eliminarSala()">
+                Eliminar Sala
+            </button>
         </div>
     </div>
     <div class="row">
@@ -56,7 +82,9 @@
                                     <i class="fas fa-user-circle"></i>
                                 </span>
                             </p>
-                            <div class="delete">
+                            <div class="delete"
+                            *ngIf="isHost()"
+                            (click)="deleteMember('placed')">
                                 <i class="fas fa-trash red-text   "></i>
                             </div>
                         </mat-list-item>
@@ -64,7 +92,7 @@
                 </mat-card-content>
                 <mat-card-actions class="list-actions">
                     <button mat-icon-button
-                    (click)="addMember('placed')">
+                    (click)="validateMembers('placed')">
                         <i class="fas fa-plus"></i>
                     </button>
                 </mat-card-actions>
@@ -92,7 +120,9 @@
                                     <i class="fas fa-user-circle"></i>
                                 </span>
                             </p>
-                            <div class="delete">
+                            <div class="delete" 
+                            *ngIf="isHost()"
+                            (click)="deleteMember('remote')">
                                 <i class="fas fa-trash red-text   "></i>
                             </div>
                         </mat-list-item>
@@ -100,7 +130,7 @@
                 </mat-card-content>
                 <mat-card-actions class="list-actions">
                     <button mat-icon-button
-                    (click)="addMember('remote')">
+                    (click)="validateMembers('remote')">
                         <i class="fas fa-plus"></i>
                     </button>
                 </mat-card-actions>
@@ -124,16 +154,22 @@
                                 <span class="thin">
                                     {{member.pg_code}}
                                 </span>  
-                                <span *ngIf="member.nickname == room.host.nickname">
-                                    <i class="fas fa-user-circle"></i>
-                                </span>
+                                
                             </p>
-                            <div class="delete">
+                            <div class="delete"
+                            *ngIf="isHost()"
+                            (click)="deleteMember('invited')">
                                 <i class="fas fa-trash red-text   "></i>
                             </div>
                         </mat-list-item>
                     </mat-list>
                 </mat-card-content>
+                <mat-card-actions class="list-actions">
+                    <button mat-icon-button
+                    (click)="validateMembers('invited')">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </mat-card-actions>
                 
             </mat-card>
         </div>
