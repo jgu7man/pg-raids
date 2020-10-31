@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CacheService } from '../../../Gdev-Tools/cache/cache.service';
 import { RoomModel } from '../../models/room.model';
+import { PublicService } from '../../services/public.service';
 
 @Component( {
   selector: 'app-toolbar',
@@ -11,7 +12,8 @@ export class ToolbarComponent implements OnInit {
 
   room: RoomModel
   constructor (
-    private _cache: CacheService
+    private _cache: CacheService,
+    public public_: PublicService
   ) {
     
     this.room = this._cache.getDataKey('room-hosted')
@@ -23,8 +25,13 @@ export class ToolbarComponent implements OnInit {
 
   get validateTime() {
     var today = new Date()
-    var roomTime = new Date(this.room.match_hour)
-    return today < roomTime ? true : false
+    let room = this._cache.getDataKey('room-hosted')
+    if (room) {
+      var roomTime = new Date(room.match_hour)
+      return today < roomTime ? true : false
+    } else {
+      return false
+    }
   }
   
 }

@@ -8,7 +8,7 @@ export class RoomModel {
         public id?: string,
         public placed_members?: RoomMember[],
         public remote_members?: RoomMember[],
-        public invited_members?: RoomMember[],
+        public invited_members?: InvitedMember[],
         public cords?: Cords,
     ) {
         
@@ -25,7 +25,14 @@ export interface RoomMember {
     pg_code?: string,
 }
 
+export interface InvitedMember {
+    nickname: string,
+    pg_code?: string,
+    by: string
+}
+
 export interface Cords {
     lat: number,
     long: number
 }
+

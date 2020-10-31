@@ -29,13 +29,13 @@
                 name="pg_code"
                 #pg_code="ngModel"
                 required
-                minlength="14"
-                maxlength="14"
-                [textMask]="{mask: mask}"
+                mask="0000 0000 0000"
                 >
-                <mat-error *ngIf="pg_code.invalid
-                || (pg_code.dirty && pg_code.touched)">
+                <mat-error *ngIf="(pg_code.dirty && pg_code.touched)">
                     Es necesario el código de entrenador para que puedas acceder
+                </mat-error>
+                <mat-error *ngIf="pg_code.invalid">
+                    No tiene la cantidad de dígitos correcta
                 </mat-error>
             </mat-form-field>
         </mat-dialog-content>

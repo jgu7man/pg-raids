@@ -4,7 +4,9 @@ import { MaterialModule } from './../material.module';
 import { FirebaseModule } from './../firebase.module';
 import { GdevToolsModule } from './../Gdev-Tools/gdev-tools.module';
 import {ShareModule} from 'ngx-sharebuttons';
-import {TextMaskModule} from 'angular2-text-mask';
+import {NgxMaskModule, IConfig} from 'ngx-mask'
+
+export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
 import { PublicComponent } from './public.component';
 import { CreateRoomComponent } from './components/create-room/create-room.component';
@@ -19,6 +21,10 @@ import { AddMemberComponent } from './components/room/add-member/add-member.comp
 import { DeleteRoomComponent } from './components/room/delete-room/delete-room.component';
 import { ShareRoomComponent } from './components/room/share-room/share-room.component';
 import { CountdownComponent } from './components/countdown/countdown.component';
+import { SideMenuComponent } from './components/side-menu/side-menu.component';
+import { BottomBarComponent } from './components/bottom-bar/bottom-bar.component';
+import { RoomSubscribedComponent } from './components/room-subscribed/room-subscribed.component';
+import { NoRoomComponent } from './components/no-room/no-room.component';
 
 
 @NgModule({
@@ -33,6 +39,10 @@ import { CountdownComponent } from './components/countdown/countdown.component';
     DeleteRoomComponent,
     ShareRoomComponent,
     CountdownComponent,
+    SideMenuComponent,
+    BottomBarComponent,
+    RoomSubscribedComponent,
+    NoRoomComponent,
   ],
   imports: [
     FormsModule,
@@ -44,7 +54,7 @@ import { CountdownComponent } from './components/countdown/countdown.component';
     GdevToolsModule,
     NgxMaterialTimepickerModule,
     ShareModule,
-    TextMaskModule
+    NgxMaskModule.forRoot()
   ],
   entryComponents: [GetNicknameComponent, AddMemberComponent, DeleteRoomComponent, ShareRoomComponent]
 })

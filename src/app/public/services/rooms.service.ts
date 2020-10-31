@@ -38,7 +38,16 @@ export class RoomsService {
         map(rooms => {
           return rooms.map((room: RoomModel) => {
             room.match_hour = new Date(room.match_hour['seconds'] * 1000)
-            return room
+            let expired = this.checkExpired(room.match_hour)
+            
+            if (expired) {
+              console.log('sala expirada');
+              this.fs.collection('rooms').ref.doc(room.id).delete()
+              this._cache.deleteDataKey('room-hosted')
+            } else {
+              return room
+            }
+
           })
         }),
         switchMap(list => {
@@ -47,14 +56,33 @@ export class RoomsService {
   }
 
   async getRoom(id: string) {
-    let doc = await this.fs.collection( 'rooms' ).ref
-      .doc( id ).get()
+    let doc = await this.fs.collection( 'rooms' ).ref.doc( id ).get()
     
     if ( doc.exists ) {
       let room = doc.data() as RoomModel
-      room.match_hour = doc.data().match_hour.toDate()
-      return room
+      room.match_hour = new Date(doc.data().match_hour['seconds']*1000)
+      let expired = this.checkExpired(room.match_hour)
+      
+      if (expired) {console.log('Sala expirada');}
+      return expired ? null : room
+    
+    } else {
+      return null
     }
+  }
+
+  checkExpired(match: Date) {
+    var today = new Date()
+    let afterMatch = new Date(
+      match.getFullYear(),
+      match.getMonth(),
+      match.getDate(),
+      match.getHours(),
+      match.getMinutes() + 10,
+    )
+
+    
+    return afterMatch < today ? true : false
   }
 
 

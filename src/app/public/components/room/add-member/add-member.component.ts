@@ -20,11 +20,6 @@ export class AddMemberComponent implements OnInit {
     list: 'placed'
   }
 
-  public mask = [
-    /[1-9]/, /\d/, /\d/, /\d/, ' ',
-    /\d/, /\d/, /\d/, /\d/, ' ',
-    /\d/, /\d/, /\d/, /\d/]
-
   constructor (
     public dialog_: MatDialogRef<AddMemberComponent>,
     public rooms_: RoomsService

@@ -2,8 +2,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import { timer, Observable } from 'rxjs';
 import { scan, takeWhile } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
-import { RoomModel, RoomMember } from '../../models/room.model';
+import { ActivatedRoute, Router } from '@angular/router';
+import { RoomModel, RoomMember, InvitedMember } from '../../models/room.model';
 import { RoomsService } from '../../services/rooms.service';
 import { CacheService } from '../../../Gdev-Tools/cache/cache.service';
 import { AlertService } from '../../../Gdev-Tools/alerts/alert.service';
@@ -24,7 +24,7 @@ export class RoomComponent implements OnInit {
   }
 
   now = new Date().getTime()
-  future: number
+  future
 
   timer$: Observable<any>
   
@@ -34,22 +34,18 @@ export class RoomComponent implements OnInit {
     private _cache: CacheService,
     private _dialog: MatDialog,
     private _alerts: AlertService,
-    private _clipboard: Clipboard
+    private _clipboard: Clipboard,
+    private router: Router
   ) {
     this.room = new RoomModel( '', '', '', new Date, this.host, '', [], [], [] )
     this.room.id = this._route.snapshot.params[ 'id' ]
    }
 
   async ngOnInit() {
-    this.room   = await this._rooms.getRoom( this.room.id )
-    this.future = this.room.match_hour.getTime()
+    this.room = await this._rooms.getRoom(this.room.id)
     
-    
-    
-    this.timer$ = timer( 0, 1000 ).pipe(
-      scan( acc => --acc, this.secondsToMatch() ),
-      takeWhile( x => x >= 0 )
-    )
+    if (!this.room) {this.router.navigate(['/404'])}
+    else {this.future = this.room.match_hour  }
   }
 
   validateMembers(list: "placed" | "remote" | "invited", member?: RoomMember) {
@@ -66,6 +62,15 @@ export class RoomComponent implements OnInit {
       return this._alerts.sendMessageAlert('La sala está llena, intenta en otra')
     
     } else {
+
+      let roomsSubscribed:string[] = this._cache.getDataKey('rooms-subscribed')
+      if (roomsSubscribed) {
+        let roomStored = roomsSubscribed.findIndex(r => r == this.room.id)
+        if (roomStored < 0) { roomsSubscribed.push(this.room.id) }
+      }
+      else {roomsSubscribed = [this.room.id]}
+      this._cache.updateData('rooms-subscribed', roomsSubscribed)
+
       return this._rooms.addMember(list, this.room, member ? member : null)
     }
   }
@@ -81,6 +86,27 @@ export class RoomComponent implements OnInit {
     })
   }
 
+  aceptRequest(invited) {
+    let acept: RoomMember = this._cache.getDataKey('player')
+    let aceptInvites: number = 0
+    let inviteds: InvitedMember[] = this.room.invited_members
+    inviteds.forEach(invi => {
+      if (invi.by && invi.by == acept.nickname) { aceptInvites += 1}
+    })
+
+    if (aceptInvites < 5) {
+      
+      let inviIndex = inviteds.findIndex(i => i.pg_code == invited)
+      this.room.invited_members[inviIndex].by = acept.nickname
+      this._rooms.updateRoom(this.room)
+
+    } else {
+
+      this._alerts.sendMessageAlert('No puedes invitar a más de 5 jugadores')
+    }
+
+  }
+
   openShareDialog() {
     var dialog = this._dialog.open(ShareRoomComponent, {
       minWidth: 350
@@ -88,6 +114,7 @@ export class RoomComponent implements OnInit {
   }
 
   clipPlayerCode(code: string) {
+    code = code.replace(/\s/g, '')
     this._clipboard.copy(code)
     this._alerts.sendFloatNotification('Código de juagador copiado')
   }
@@ -107,15 +134,12 @@ export class RoomComponent implements OnInit {
 
   isHost() {
     let player: RoomMember = this._cache.getDataKey('player')
-    return this.room.host.pg_code == player.pg_code ? true : false
+    if (player) {
+      return this.room.host.pg_code == player.pg_code ? true : false
+    } else {
+      return false
+    }
   }
-
-
-  secondsToMatch() {
-    var delta = Math.abs( this.future - this.now ) / 1000;
-    return Math.ceil( delta )
-  }
-
 
 
   eliminarSala() {

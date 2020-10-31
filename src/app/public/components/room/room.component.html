@@ -19,7 +19,7 @@
                 cords: {{room.cords.lat}} - {{room.cords.long}}
             </p>
         </div>
-        <div class="col s12" id="countdown">
+        <div class="col s12" id="countdown" *ngIf="future">
             <app-countdown [future]="future"></app-countdown>
             <p>Segundos para el encuentro</p>
         </div>
@@ -36,7 +36,7 @@
                 <b>Hoster: </b>
                 <span class="data">{{room.host.nickname}}</span>
             </p>
-            <span class="data">{{room.host.pg_code}}</span>
+            <span class="data">{{room.host.pg_code | mask: '0000 0000 0000'}}</span>
         </div>
     </div>
     <!-- END HOST INFO -->
@@ -95,7 +95,7 @@
                             (click)="clipPlayerCode(member.pg_code)">
                                 @{{member.nickname}} - 
                                 <span class="thin">
-                                    {{member.pg_code}}
+                                    {{member.pg_code | mask: '0000 0000 0000'}}
                                 </span>  
                                 <span *ngIf="member.nickname == room.host.nickname">
                                     <i class="fas fa-user-circle"></i>
@@ -137,7 +137,7 @@
                             (click)="clipPlayerCode(member.pg_code)">
                                 @{{member.nickname}} - 
                                 <span class="thin">
-                                    {{member.pg_code}}
+                                    {{member.pg_code | mask: '0000 0000 0000'}}
                                 </span>  
                                 <span *ngIf="member.nickname == room.host.nickname">
                                     <i class="fas fa-user-circle"></i>
@@ -181,10 +181,19 @@
                             (click)="clipPlayerCode(member.pg_code)">
                                 @{{member.nickname}} - 
                                 <span class="thin">
-                                    {{member.pg_code}}
+                                    {{member.pg_code | mask: '0000 0000 0000'}}
                                 </span>  
                                 
                             </p>
+                            <p matLine *ngIf="member.by; else request">
+                                Invitado por: @{{member.by}}
+                            </p>
+                            <ng-template #request>
+                                <button mat-button class="request-btn" 
+                                (click)="aceptRequest(member.pg_code)">
+                                    Solicita invitación
+                                </button>
+                            </ng-template>
                             <div class="delete"
                             *ngIf="isHost()"
                             (click)="deleteMember('invited')">

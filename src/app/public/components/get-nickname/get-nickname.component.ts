@@ -17,10 +17,7 @@ export class GetNicknameComponent implements OnInit {
     nickname: '', pg_code: ''
   }
 
-  public mask = [
-    /[1-9]/, /\d/, /\d/, /\d/, ' ',
-    /\d/, /\d/, /\d/, /\d/, ' ',
-    /\d/, /\d/, /\d/, /\d/]
+  
   
   constructor (
     private _cache: CacheService,
@@ -30,7 +27,8 @@ export class GetNicknameComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    
+    let player = this._cache.getDataKey('player')
+    if(player) this.member = player
   }
 
   async onSave() {

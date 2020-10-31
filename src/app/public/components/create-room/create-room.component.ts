@@ -61,9 +61,7 @@ export class CreateRoomComponent implements OnInit {
     var hour = matchTime.split( ':' )[ 0 ]
     var min = matchTime.split( ':' )[ 1 ]
 
-    console.log(matchTime);
     this.room.match_hour = this.now(hour, min, true)
-    console.log(this.room.match_hour);
   }
 
   

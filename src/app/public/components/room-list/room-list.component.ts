@@ -3,6 +3,7 @@ import { RoomModel } from '../../models/room.model';
 import { RoomsService } from '../../services/rooms.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
+import { CacheService } from '../../../Gdev-Tools/cache/cache.service';
 
 @Component({
   templateUrl: './room-list.component.html',
@@ -14,30 +15,23 @@ export class RoomListComponent implements OnInit {
 
   constructor (
     public room_: RoomsService,
-    private fs: AngularFirestore
+    private fs: AngularFirestore,
+    private _cache: CacheService
   ) { }
 
   ngOnInit(): void {
-    this.room_.roomList.subscribe(rooms => {
-      var today = new Date()
-      rooms.forEach(room => {
-        let match = room.match_hour
-        console.log(match);
-        let afterMatch = new Date(
-          match.getFullYear(),
-          match.getMonth(),
-          match.getDate(),
-          match.getHours() + 1,
-          match.getMinutes(),
-        )
+    // this.room_.roomList.subscribe(rooms => {
+    //   rooms.forEach( async room => {
+    //     let expired = await this.room_.checkExpired(room.match_hour)
+        
+    //     if (expired) {
 
-        if (afterMatch < today) {
-
-          console.log('sala expirada');
-          this.fs.collection('rooms').ref.doc(room.id).delete()
-        }
-      })
-    })
+    //       console.log('sala expirada');
+    //       this.fs.collection('rooms').ref.doc(room.id).delete()
+    //       this._cache.deleteDataKey('room-hosted')
+    //     }
+    //   })
+    // })
   }
 
   

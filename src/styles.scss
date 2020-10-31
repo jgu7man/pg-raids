@@ -1,5 +1,6 @@
 
 @import '~@angular/material/theming';
+
 @import './pokemon-pallete.scss';
 @import "./app/Gdev-Tools/styles/collection.css";
 @import "./app/Gdev-Tools/styles/colors.css";
@@ -10,6 +11,9 @@
 @import "./app/Gdev-Tools/styles/spiner.css";
 @import "./app/Gdev-Tools/styles/text.css";
 @import "./app/Gdev-Tools/styles/waves-fx.css";
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap');
+
 @include mat-core();
 
 
@@ -32,7 +36,11 @@ $pg-raids-theme: mat-light-theme($pg-raids-primary, $pg-raids-accent, $pg-raids-
 /* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: 'Poppins', sans-serif; }
+* {
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+}
 
 mat-form-field {
     width: 100%;

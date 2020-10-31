@@ -2,7 +2,7 @@
   "hosting": [
     {
       "target": "pg-raids",
-      "public": "dist/pg-raids",
+      "public": "dist/pg-raids/browser",
       "ignore": [
         "**/.*"
       ],
