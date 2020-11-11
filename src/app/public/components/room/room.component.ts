@@ -11,6 +11,7 @@ import { AddMemberComponent, MemberAdded } from './add-member/add-member.compone
 import { DeleteRoomComponent } from './delete-room/delete-room.component';
 import { ShareRoomComponent } from './share-room/share-room.component';
 import {Clipboard} from '@angular/cdk/clipboard';
+import { SeoService, SEOCONFIG } from '../../../Gdev-Tools/commons/gdev-seo.service';
 
 @Component({
   templateUrl: './room.component.html',
@@ -35,7 +36,8 @@ export class RoomComponent implements OnInit {
     private _dialog: MatDialog,
     private _alerts: AlertService,
     private _clipboard: Clipboard,
-    private router: Router
+    private router: Router,
+    private _seo: SeoService
   ) {
     this.room = new RoomModel( '', '', '', new Date, this.host, '', [], [], [] )
     this.room.id = this._route.snapshot.params[ 'id' ]
@@ -46,6 +48,14 @@ export class RoomComponent implements OnInit {
     
     if (!this.room) {this.router.navigate(['/404'])}
     else {this.future = this.room.match_hour  }
+  }
+
+  setSeo() {
+    var seoConfig: SEOCONFIG = {
+      title: `¡Vamos por ${this.room.poke_name}!`,
+      description: `PG RAIDS: Organiza incrsuiones de Pokemon GO con tus amigos`
+    }
+    this._seo.generarTags(seoConfig)
   }
 
   validateMembers(list: "placed" | "remote" | "invited", member?: RoomMember) {
